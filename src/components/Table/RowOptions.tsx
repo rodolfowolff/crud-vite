@@ -49,7 +49,7 @@ function RowOptions({ id }: { id: number | string }) {
         PaperProps={{ style: { minWidth: "8rem" } }}
       >
         <MenuItem sx={{ p: 0 }}>
-          <Link to={`/product/${id}`}>
+          <Link to={`/products/${id}`}>
             <MenuItemLink>
               <Visibility fontSize="small" sx={{ mr: 2 }} />
               View
