@@ -1,4 +1,6 @@
 import React, { memo } from "react";
+import { NavLink } from "react-router-dom";
+
 import Box from "@mui/material/Box";
 import {
   Drawer,
@@ -8,10 +10,8 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import DiamondIcon from "@mui/icons-material/Diamond";
-import CategoryIcon from "@mui/icons-material/Category";
+import { Home, Diamond, Category } from "@mui/icons-material";
 import CustomAppBar from "../AppBar";
-import { NavLink } from "react-router-dom";
 
 function CustomMenu({ children }: any): JSX.Element {
   const [drawer, setDrawer] = React.useState(false);
@@ -29,8 +29,9 @@ function CustomMenu({ children }: any): JSX.Element {
     };
 
   const ListItemMenu = [
-    { label: "Produtos", to: "/products", icon: <DiamondIcon /> },
-    { label: "Categorias", to: "/categories", icon: <CategoryIcon /> },
+    { label: "Inicio", to: "/", icon: <Home /> },
+    { label: "Produtos", to: "/products", icon: <Diamond /> },
+    { label: "Categorias", to: "/categories", icon: <Category /> },
   ];
 
   return (
