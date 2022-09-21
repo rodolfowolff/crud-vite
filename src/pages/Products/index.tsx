@@ -7,6 +7,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import TableHeader from "../../components/TableHeader";
 import SidebarAddProductDrawer from "../../components/Drawer";
+import RowOptions from "../../components/Table/RowOptions";
 
 interface ProductProps {
   id: number;
@@ -18,6 +19,10 @@ interface ProductProps {
   createdAt: string;
 }
 
+interface CellType {
+  row: ProductProps;
+}
+
 export default function PageProducts() {
   const { data: dataProductsQuery, isLoading, isError } = getProductsQuery();
   const {
@@ -25,23 +30,34 @@ export default function PageProducts() {
     isLoading: isLoadingCategories,
     isError: isErrorCategories,
   } = getCategoriesQuery();
-  const [columns, setColumns] = useState<GridColDef[]>();
+  const [columns, setColumns] = useState<any>([]);
   const [rows, setRows] = useState<GridColDef[]>();
   const [addProductOpen, setAddProductOpen] = useState<boolean>(false);
   const [categoryData, setCategoryData] = useState([]);
+  const [pageSize, setPageSize] = useState<number>(10);
 
   useEffect(() => {
     if (!isLoading && !isError) {
       const getProduct = dataProductsQuery.products.map((prod: any) => prod);
 
-      const column = Object.keys(getProduct[0]).map((col) => {
+      const productColName = Object.keys(getProduct[0]).map((col) => {
         return {
           field: col,
           headerName: col[0].toUpperCase() + col.slice(1),
           width: col.length * 30,
           flex: 0.1,
-          minWidth: 150,
+          minWidth: 30,
         };
+      });
+      productColName.push({
+        flex: 0.1,
+        width: 30,
+        minWidth: 30,
+        //@ts-ignore
+        sortable: false,
+        field: "actions",
+        headerName: "Actions",
+        renderCell: ({ row }: CellType) => <RowOptions id={row.id} />,
       });
 
       const rows1 = getProduct.map((row: ProductProps) => {
@@ -53,7 +69,8 @@ export default function PageProducts() {
           category: row.category.name,
         };
       });
-      setColumns(column);
+
+      setColumns(productColName);
       setRows(rows1);
     }
   }, [isLoading, isError, dataProductsQuery]);
@@ -85,6 +102,9 @@ export default function PageProducts() {
               m: 2,
             }}
             disableSelectionOnClick
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize: number) => setPageSize(newPageSize)}
+            rowsPerPageOptions={[10, 25, 50]}
           />
           {!isLoadingCategories && !isErrorCategories && (
             <SidebarAddProductDrawer
