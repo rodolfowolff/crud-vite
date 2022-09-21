@@ -67,7 +67,7 @@ const defaultValues = {
 const SidebarAddProductDrawer = (props: AddProductDrawerType) => {
   const { open, toggle, categories } = props;
   const { enqueueSnackbar } = useSnackbar();
-  const [selectCategory, setSelectCategory] = useState(categories[0].id || "");
+  const [selectCategory, setSelectCategory] = useState(categories[0]?.id || "");
 
   const {
     reset,

@@ -19,15 +19,6 @@ function RowOptions({ id }: { id: number | string }) {
     handleRowOptionsClose();
   };
 
-  const MenuItemLink = styled("a")(({ theme }) => ({
-    width: "100%",
-    display: "flex",
-    alignItems: "center",
-    textDecoration: "none",
-    padding: "7px 16px",
-    color: theme.palette.text.primary,
-  }));
-
   return (
     <>
       <IconButton size="small" onClick={handleRowOptionsClick}>
@@ -48,18 +39,26 @@ function RowOptions({ id }: { id: number | string }) {
         }}
         PaperProps={{ style: { minWidth: "8rem" } }}
       >
-        <MenuItem sx={{ p: 0 }}>
-          <Link to={`/products/${id}`}>
-            <MenuItemLink>
-              <Visibility fontSize="small" sx={{ mr: 2 }} />
-              View
-            </MenuItemLink>
+        <MenuItem>
+          <Link
+            to={`/products/${id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Visibility fontSize="small" sx={{ mr: 2 }} />
+            Ver
           </Link>
         </MenuItem>
+
         <MenuItem onClick={handleRowOptionsClose}>
-          <Edit fontSize="small" sx={{ mr: 2 }} />
-          Edit
+          <Link
+            to={`/products/edit/${id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Edit fontSize="small" sx={{ mr: 2 }} />
+            Editar
+          </Link>
         </MenuItem>
+
         <MenuItem onClick={handleDelete}>
           <Delete fontSize="small" sx={{ mr: 2 }} />
           Delete

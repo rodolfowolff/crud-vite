@@ -38,15 +38,17 @@ const CardStats = (props: CardStatsVerticalProps) => {
         </Box>
         <Typography variant="caption">{subtitle}</Typography>
 
-        <Link to={to} style={{ textDecoration: "none" }}>
-          <IconButton
-            size="small"
-            aria-label="redirect"
-            sx={{ color: "text.secondary" }}
-          >
-            <ArrowForward />
-          </IconButton>
-        </Link>
+        <div>
+          <Link to={to} style={{ textDecoration: "none" }}>
+            <IconButton
+              size="small"
+              aria-label="redirect"
+              sx={{ color: "text.secondary" }}
+            >
+              <ArrowForward />
+            </IconButton>
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );
