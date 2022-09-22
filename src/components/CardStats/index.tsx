@@ -10,35 +10,48 @@ import { ArrowForward } from "@mui/icons-material";
 export type CardStatsVerticalProps = {
   title: string;
   stats: string;
-  subtitle: string;
   to: string;
 };
 
 const CardStats = (props: CardStatsVerticalProps) => {
-  const { title, subtitle, stats, to } = props;
+  const { title, stats, to } = props;
 
   return (
-    <Card sx={{ color: "whitesmoke", backgroundColor: "#804BDF" }}>
+    <Card
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        color: "whitesmoke",
+        backgroundColor: "#6e37d6",
+        justifyContent: "center",
+      }}
+    >
       <CardContent>
-        <Typography sx={{ fontWeight: 600, fontSize: "0.875rem" }}>
-          {title}
-        </Typography>
         <Box
           sx={{
-            mt: 1.5,
+            mt: 1,
             display: "flex",
             flexWrap: "wrap",
             mb: 1.5,
-            alignItems: "flex-start",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Typography variant="h6" sx={{ mr: 2 }}>
             {stats}
           </Typography>
         </Box>
-        <Typography variant="caption">{subtitle}</Typography>
+        <Typography sx={{ fontWeight: 600, fontSize: "0.875rem" }}>
+          {title}
+        </Typography>
 
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "5px",
+          }}
+        >
           <Link to={to} style={{ textDecoration: "none" }}>
             <IconButton
               size="small"

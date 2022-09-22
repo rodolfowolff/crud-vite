@@ -1,7 +1,25 @@
 import CardStats from "../../components/CardStats";
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import {
+  getTotalCategoriesQuery,
+  getTotalProductsQuery,
+} from "../../services/getTotalProductCategory";
 
 export default function Home() {
+  const {
+    data: totalCategoriesQuery,
+    isLoading,
+    isError,
+  } = getTotalCategoriesQuery();
+  const {
+    data: totalProductsQuery,
+    isLoading: isLoadingTotalProducts,
+    isError: isErrorTotalProducts,
+  } = getTotalProductsQuery();
+
+  if (isLoading || isLoadingTotalProducts) return <>Loading...</>;
+  if (isError || isErrorTotalProducts) return <>Error(:</>;
+
   return (
     <>
       <Card
@@ -31,29 +49,24 @@ export default function Home() {
       </Card>
       <Grid
         container
-        spacing={1}
+        spacing={4}
         sx={{
-          width: "100%",
-          display: "flex",
-          flexWrap: "wrap",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: 10,
+          marginTop: 5,
         }}
       >
         <Grid item xs={12} sm={6} md={3} sx={{ order: 0 }}>
           <CardStats
-            stats="12"
+            stats={totalProductsQuery?.data?.getAllProducts?.total}
             title="PRODUTOS"
-            subtitle="Total de produtos"
             to="/products"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3} sx={{ order: 0 }}>
           <CardStats
-            stats="95"
+            stats={totalCategoriesQuery?.getAllCategories?.total}
             title="CATEGORIAS"
-            subtitle="Total de categorias"
             to="/categories"
           />
         </Grid>
