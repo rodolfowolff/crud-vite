@@ -15,6 +15,6 @@ export function getCategoriesQuery() {
 
     const response = await api(queryString);
 
-    return response.data.data.getAllCategories;
+    return response.data.data;
   });
 }

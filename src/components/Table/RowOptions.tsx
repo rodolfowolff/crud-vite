@@ -29,7 +29,6 @@ function RowOptions({ id }: { id: number | string }) {
       const queryString = `mutation{
         deleteProduct(id: ${id})
       }`;
-      console.log("queryString: ", queryString);
       const response = await api(queryString);
       return response.data;
     },

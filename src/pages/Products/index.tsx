@@ -78,7 +78,7 @@ export default function PageProducts() {
 
   useEffect(() => {
     if (!isLoadingCategories && !isErrorCategories) {
-      setCategoryData(dataCategoriesQuery.categories);
+      setCategoryData(dataCategoriesQuery.getAllCategories.categories);
     }
   }, [isLoadingCategories, isErrorCategories, dataCategoriesQuery]);
 

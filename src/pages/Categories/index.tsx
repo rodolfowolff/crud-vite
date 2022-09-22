@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Box, Card, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { getCategoriesQuery } from "../../services/categories/getAllCategories";
+import { Category } from "@mui/icons-material";
 
 interface CategoryProps {
   name: string;
@@ -18,7 +26,7 @@ export default function PageCategories() {
 
   useEffect(() => {
     if (!isLoading && !isError) {
-      const getCategories = dataCategoriesQuery.categories.map(
+      const getCategories = dataCategoriesQuery.getAllCategories.categories.map(
         (cat: CategoryProps) => cat
       );
 
@@ -54,18 +62,55 @@ export default function PageCategories() {
 
   return (
     <div style={{ height: 400, width: "100%" }}>
-      <div style={{ display: "flex", height: "100%" }}>
-        <div style={{ flexGrow: 1 }}>
-          {!isLoading && !isError && columns?.length && rows?.length && (
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
-            />
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingX: 10,
+        }}
+      >
+        <Typography
+          variant="body1"
+          sx={{ mr: 2, fontWeight: 600, color: "text.primary" }}
+        >
+          {`Total de categoria:  ${dataCategoriesQuery?.getAllCategories?.total}`}
+        </Typography>
+
+        <Button
+          variant="contained"
+          size="large"
+          onClick={() => {
+            console.log("toggle");
+          }}
+          endIcon={<Category />}
+          sx={{ mb: 2, width: 320, height: 60 }}
+        >
+          Adicionar categoria
+        </Button>
+      </Box>
+
+      <Box sx={{ mt: 1, display: "flex", alignItems: "center", paddingX: 10 }}>
+        <List dense sx={{ mb: 1 }}>
+          {dataCategoriesQuery?.getAllCategories?.categories?.map(
+            (cat: { id: number; name: string }) => {
+              return (
+                <ListItem
+                  key={cat.name}
+                  sx={{ px: 0, py: 2, display: "flex", flexWrap: "wrap" }}
+                >
+                  <ListItemText
+                    sx={{ m: 0 }}
+                    primary={cat.id}
+                    secondary={cat.name}
+                  />
+                </ListItem>
+              );
+            }
           )}
-        </div>
-      </div>
+        </List>
+      </Box>
     </div>
   );
 }
