@@ -22,7 +22,7 @@ export default function PageProductDetail() {
 
   return (
     <>
-      {dataProduct?.data?.getProductByID?.length ? (
+      {dataProduct.data.getProductByID ? (
         <>
           <Box
             sx={{
