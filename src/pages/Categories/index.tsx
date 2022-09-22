@@ -11,6 +11,7 @@ import {
 import { getCategoriesQuery } from "../../services/categories/getAllCategories";
 import { Category } from "@mui/icons-material";
 import AddCategoryDrawer from "../../components/Drawer/AddCategoryDrawer";
+import FallbackSpinner from "../../components/Spinner";
 
 export default function PageCategories() {
   const {
@@ -22,7 +23,7 @@ export default function PageCategories() {
 
   const toggleAddCategoryDrawer = () => setAddCategoryOpen(!addCategoryOpen);
 
-  if (isLoading) return <>Loading...</>;
+  if (isLoading) return <FallbackSpinner />;
   if (isError) return <>Error(:</>;
 
   return (

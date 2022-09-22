@@ -4,6 +4,7 @@ import {
   getTotalCategoriesQuery,
   getTotalProductsQuery,
 } from "../../services/getTotalProductCategory";
+import FallbackSpinner from "../../components/Spinner";
 
 export default function Home() {
   const {
@@ -17,7 +18,7 @@ export default function Home() {
     isError: isErrorTotalProducts,
   } = getTotalProductsQuery();
 
-  if (isLoading || isLoadingTotalProducts) return <>Loading...</>;
+  if (isLoading || isLoadingTotalProducts) return <FallbackSpinner />;
   if (isError || isErrorTotalProducts) return <>Error(:</>;
 
   return (

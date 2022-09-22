@@ -21,7 +21,6 @@ import Close from "@mui/icons-material/Close";
 interface AddCategoryDrawerType {
   open: boolean;
   toggle: () => void;
-  // categories: any;
 }
 
 interface CategoryData {

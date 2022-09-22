@@ -21,6 +21,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import FallbackSpinner from "../../components/Spinner";
 
 interface ProductData {
   categoryId: string;
@@ -105,7 +106,7 @@ export default function PageProductEdit() {
     }
   }, [isLoadingCategories, isErrorCategories, dataCategoriesQuery]);
 
-  if (isLoading || isLoadingCategories) return <>Loading...</>;
+  if (isLoading || isLoadingCategories) return <FallbackSpinner />;
   if (isError || isErrorCategories) return <>Error(:</>;
 
   return (

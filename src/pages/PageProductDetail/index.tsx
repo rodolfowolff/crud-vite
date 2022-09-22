@@ -1,11 +1,12 @@
 import { Link, useParams } from "react-router-dom";
+import FallbackSpinner from "../../components/Spinner";
 import { getProductByID } from "../../services/products/getProductByID";
 
 export default function PageProductDetail() {
   let { id } = useParams<"id">();
   const { data: dataProduct, isLoading, isError } = getProductByID({ id });
 
-  if (isLoading) return <>Loading...</>;
+  if (isLoading) return <FallbackSpinner />;
   if (isError) return <>Error(:</>;
 
   return (

@@ -8,6 +8,7 @@ import { Box } from "@mui/material";
 import TableHeader from "../../components/TableHeader";
 import AddProductDrawer from "../../components/Drawer/AddProductDrawer";
 import RowOptions from "../../components/Table/RowOptions";
+import FallbackSpinner from "../../components/Spinner";
 
 interface ProductProps {
   id: number;
@@ -84,7 +85,7 @@ export default function PageProducts() {
 
   const toggleAddProductDrawer = () => setAddProductOpen(!addProductOpen);
 
-  if (isLoading || isLoadingCategories) return <>Loading...</>;
+  if (isLoading || isLoadingCategories) return <FallbackSpinner />;
   if (isError || isErrorCategories) return <>Error(:</>;
 
   return (
