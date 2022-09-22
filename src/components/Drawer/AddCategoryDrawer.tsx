@@ -108,13 +108,14 @@ const AddCategoryDrawer = (props: AddCategoryDrawerType) => {
     } catch {
       handleEnqueueSnackbar("Erro tente novamente mais tarde", "error");
     } finally {
+      setValue("category", "");
       toggle();
     }
   };
 
   const handleClose = () => {
-    toggle();
     setValue("category", "");
+    toggle();
   };
 
   return (
