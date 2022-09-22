@@ -22,131 +22,146 @@ export default function PageProductDetail() {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          paddingX: 9,
-        }}
-      >
-        <Typography
-          variant="h6"
-          sx={{ ml: 3, fontWeight: 600, color: "text.primary" }}
-        >
-          {`Detalhes do produto`}
-        </Typography>
-      </Box>
+      {dataProduct?.data?.getProductByID?.length ? (
+        <>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              paddingX: 9,
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{ ml: 3, fontWeight: 600, color: "text.primary" }}
+            >
+              Detalhes do produto
+            </Typography>
+          </Box>
+          <Box
+            sx={{ mt: 1, display: "flex", alignItems: "center", paddingX: 10 }}
+          >
+            <List
+              sx={{
+                width: "100%",
+                maxWidth: 660,
+                position: "relative",
+                overflow: "auto",
+              }}
+            >
+              <ListItem>
+                <ListItemText
+                  primary={
+                    <>
+                      <Typography variant="body2">Nome</Typography>
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="h6"
+                      >
+                        {dataProduct.data.getProductByID.name}
+                      </Typography>
+                    </>
+                  }
+                  primaryTypographyProps={{
+                    fontSize: 15,
+                    fontWeight: "medium",
+                    lineHeight: "20px",
+                    mb: "2px",
+                  }}
+                />
+              </ListItem>
+              <Divider />
 
-      <Box sx={{ mt: 1, display: "flex", alignItems: "center", paddingX: 10 }}>
-        <List
+              <ListItem>
+                <ListItemText
+                  primary={
+                    <>
+                      <Typography variant="body2">Código</Typography>
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="h6"
+                      >
+                        {dataProduct.data.getProductByID.code}
+                      </Typography>
+                    </>
+                  }
+                  primaryTypographyProps={{
+                    fontSize: 15,
+                    fontWeight: "medium",
+                    lineHeight: "20px",
+                    mb: "2px",
+                  }}
+                />
+              </ListItem>
+              <Divider />
+
+              <ListItem>
+                <ListItemText
+                  primary={
+                    <>
+                      <Typography variant="body2">Categoria</Typography>
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="h6"
+                      >
+                        {dataProduct.data.getProductByID.category.name}
+                      </Typography>
+                    </>
+                  }
+                  primaryTypographyProps={{
+                    fontSize: 15,
+                    fontWeight: "medium",
+                    lineHeight: "20px",
+                    mb: "2px",
+                  }}
+                />
+              </ListItem>
+              <Divider />
+
+              <ListItem>
+                <ListItemText
+                  primary={
+                    <>
+                      <Typography variant="body2">Data de criação</Typography>
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="h6"
+                      >
+                        {format(
+                          new Date(dataProduct.data.getProductByID.createdAt),
+                          "dd/MM/yyyy"
+                        )}
+                      </Typography>
+                    </>
+                  }
+                  primaryTypographyProps={{
+                    fontSize: 15,
+                    fontWeight: "medium",
+                    lineHeight: "20px",
+                    mb: "2px",
+                  }}
+                />
+              </ListItem>
+            </List>
+          </Box>
+        </>
+      ) : (
+        <Box
           sx={{
-            width: "100%",
-            maxWidth: 660,
-            position: "relative",
-            overflow: "auto",
+            alignItems: "center",
+            justifyItems: "center",
+            paddingX: 9,
+            mt: 5,
           }}
         >
-          <ListItem>
-            <ListItemText
-              primary={
-                <>
-                  <Typography variant="body2">Nome</Typography>
-                  <Typography
-                    sx={{ display: "inline" }}
-                    component="span"
-                    variant="h6"
-                  >
-                    {dataProduct.data.getProductByID.name}
-                  </Typography>
-                </>
-              }
-              primaryTypographyProps={{
-                fontSize: 15,
-                fontWeight: "medium",
-                lineHeight: "20px",
-                mb: "2px",
-              }}
-            />
-          </ListItem>
-          <Divider />
-
-          <ListItem>
-            <ListItemText
-              primary={
-                <>
-                  <Typography variant="body2">Código</Typography>
-                  <Typography
-                    sx={{ display: "inline" }}
-                    component="span"
-                    variant="h6"
-                  >
-                    {dataProduct.data.getProductByID.code}
-                  </Typography>
-                </>
-              }
-              primaryTypographyProps={{
-                fontSize: 15,
-                fontWeight: "medium",
-                lineHeight: "20px",
-                mb: "2px",
-              }}
-            />
-          </ListItem>
-          <Divider />
-
-          <ListItem>
-            <ListItemText
-              primary={
-                <>
-                  <Typography variant="body2">Categoria</Typography>
-                  <Typography
-                    sx={{ display: "inline" }}
-                    component="span"
-                    variant="h6"
-                  >
-                    {dataProduct.data.getProductByID.category.name}
-                  </Typography>
-                </>
-              }
-              primaryTypographyProps={{
-                fontSize: 15,
-                fontWeight: "medium",
-                lineHeight: "20px",
-                mb: "2px",
-              }}
-            />
-          </ListItem>
-          <Divider />
-
-          <ListItem>
-            <ListItemText
-              primary={
-                <>
-                  <Typography variant="body2">Data de criação</Typography>
-                  <Typography
-                    sx={{ display: "inline" }}
-                    component="span"
-                    variant="h6"
-                  >
-                    {format(
-                      new Date(dataProduct.data.getProductByID.createdAt),
-                      "dd/MM/yyyy"
-                    )}
-                  </Typography>
-                </>
-              }
-              primaryTypographyProps={{
-                fontSize: 15,
-                fontWeight: "medium",
-                lineHeight: "20px",
-                mb: "2px",
-              }}
-            />
-          </ListItem>
-        </List>
-      </Box>
-
+          <Typography variant="body2">Produto não encontrado</Typography>
+        </Box>
+      )}
       <Box
         sx={{
           alignItems: "center",
