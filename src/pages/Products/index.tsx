@@ -41,11 +41,11 @@ export default function PageProducts() {
 
   useEffect(() => {
     if (!isLoading && !isError) {
-      const getProduct = dataProductsQuery.data.getAllProducts.products.map(
-        (prod: any) => prod
-      );
+      if (dataProductsQuery.data.getAllProducts.total >= 1) {
+        const getProduct = dataProductsQuery.data.getAllProducts.products.map(
+          (prod: any) => prod
+        );
 
-      if (getProduct.length >= 1) {
         const productColName = Object.keys(getProduct[0]).map((col) => {
           return {
             field: col,
@@ -75,9 +75,11 @@ export default function PageProducts() {
             category: row.category.name,
           };
         });
-
         setColumns(productColName);
         setRows(rows1);
+      } else {
+        setColumns([]);
+        setRows([]);
       }
     }
   }, [isLoading, isError, dataProductsQuery]);
