@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import { getProductsQuery } from "../../services/products/getAllProducts";
 import { getCategoriesQuery } from "../../services/categories/getAllCategories";
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import TableHeader from "../../components/TableHeader";
 import AddProductDrawer from "../../components/Drawer/AddProductDrawer";
 import RowOptions from "../../components/Table/RowOptions";
 import FallbackSpinner from "../../components/Spinner";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 interface ProductProps {
   id: number;
@@ -42,38 +44,41 @@ export default function PageProducts() {
       const getProduct = dataProductsQuery.data.getAllProducts.products.map(
         (prod: any) => prod
       );
-      const productColName = Object.keys(getProduct[0]).map((col) => {
-        return {
-          field: col,
-          headerName: col[0].toUpperCase() + col.slice(1),
-          width: col.length * 30,
+
+      if (getProduct.length >= 1) {
+        const productColName = Object.keys(getProduct[0]).map((col) => {
+          return {
+            field: col,
+            headerName: col[0].toUpperCase() + col.slice(1),
+            width: col.length * 30,
+            flex: 0.1,
+            minWidth: 30,
+          };
+        });
+        productColName.push({
           flex: 0.1,
+          width: 30,
           minWidth: 30,
-        };
-      });
-      productColName.push({
-        flex: 0.1,
-        width: 30,
-        minWidth: 30,
-        //@ts-ignore
-        sortable: false,
-        field: "actions",
-        headerName: "Actions",
-        renderCell: ({ row }: CellType) => <RowOptions id={row.id} />,
-      });
+          //@ts-ignore
+          sortable: false,
+          field: "actions",
+          headerName: "Actions",
+          renderCell: ({ row }: CellType) => <RowOptions id={row.id} />,
+        });
 
-      const rows1 = getProduct.map((row: ProductProps) => {
-        return {
-          id: row.id,
-          name: row.name,
-          code: row.code,
-          createdAt: row.createdAt,
-          category: row.category.name,
-        };
-      });
+        const rows1 = getProduct.map((row: ProductProps) => {
+          return {
+            id: row.id,
+            name: row.name,
+            code: row.code,
+            createdAt: row.createdAt,
+            category: row.category.name,
+          };
+        });
 
-      setColumns(productColName);
-      setRows(rows1);
+        setColumns(productColName);
+        setRows(rows1);
+      }
     }
   }, [isLoading, isError, dataProductsQuery]);
 
@@ -90,12 +95,15 @@ export default function PageProducts() {
 
   return (
     <>
-      {!isLoading && !isError && columns?.length && rows?.length && (
-        <Box sx={{ width: "100%" }}>
-          <TableHeader
-            toggle={toggleAddProductDrawer}
-            categories={categoryData || []}
-          />
+      <Box sx={{ width: "100%" }}>
+        <TableHeader toggle={toggleAddProductDrawer} />
+        <AddProductDrawer
+          open={addProductOpen}
+          toggle={toggleAddProductDrawer}
+          categories={categoryData || []}
+        />
+
+        {columns?.length && rows?.length ? (
           <DataGrid
             autoHeight
             rows={rows}
@@ -108,15 +116,36 @@ export default function PageProducts() {
             onPageSizeChange={(newPageSize: number) => setPageSize(newPageSize)}
             rowsPerPageOptions={[10, 25, 50]}
           />
-          {!isLoadingCategories && !isErrorCategories && (
-            <AddProductDrawer
-              open={addProductOpen}
-              toggle={toggleAddProductDrawer}
-              categories={categoryData || []}
+        ) : (
+          <Box sx={{ pl: 9 }}>
+            <Typography variant="h6">Nenhum produto cadastrado</Typography>
+          </Box>
+        )}
+
+        <Box
+          sx={{
+            alignItems: "center",
+            justifyItems: "center",
+            paddingX: 9,
+            mt: 5,
+          }}
+        >
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              color: "purple",
+            }}
+          >
+            <ArrowBackIcon
+              sx={{
+                cursor: "pointer",
+              }}
             />
-          )}
+            Retornar a pagina inicial
+          </Link>
         </Box>
-      )}
+      </Box>
     </>
   );
 }
