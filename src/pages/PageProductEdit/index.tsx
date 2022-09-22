@@ -50,7 +50,6 @@ export default function PageProductEdit() {
     control,
     setValue: setFormValue,
     handleSubmit,
-    formState: { errors },
   } = useForm({
     defaultValues: {
       categoryId: dataProduct?.data?.getProductByID?.category?.name,
@@ -102,7 +101,7 @@ export default function PageProductEdit() {
       handleEnqueueSnackbar("Erro tente novamente mais tarde", "error");
     } finally {
       setFormValue("name", "");
-      setFormValue("quantity", 1);
+      setFormValue("quantity", "");
       navigate("/products");
     }
   };
@@ -152,16 +151,10 @@ export default function PageProductEdit() {
                     label="Nome"
                     value={value}
                     onChange={onChange}
-                    error={Boolean(errors.name)}
                     placeholder={dataProduct?.data?.getProductByID?.name}
                   />
                 )}
               />
-              {errors.name && (
-                <FormHelperText sx={{ color: "error.main" }} id="name-error">
-                  Nome não pode ser vazio.
-                </FormHelperText>
-              )}
             </FormControl>
           </Grid>
 
@@ -176,19 +169,10 @@ export default function PageProductEdit() {
                     label="Quantidade"
                     value={value}
                     onChange={onChange}
-                    error={Boolean(errors.quantity)}
                     placeholder={`${dataProduct.data.getProductByID.quantity}`}
                   />
                 )}
               />
-              {errors.quantity && (
-                <FormHelperText
-                  sx={{ color: "error.main" }}
-                  id="quantity-error"
-                >
-                  Quantidade não pode ser vazia.
-                </FormHelperText>
-              )}
             </FormControl>
           </Grid>
 
@@ -203,7 +187,6 @@ export default function PageProductEdit() {
                 onChange={(e) =>
                   setValues({ ...values, categoryId: e.target.value })
                 }
-                error={Boolean(errors.categoryId)}
               >
                 {categoryData?.map((cat: any) => (
                   <MenuItem key={cat.name} value={cat.id}>
@@ -211,14 +194,6 @@ export default function PageProductEdit() {
                   </MenuItem>
                 ))}
               </Select>
-              {errors.categoryId && (
-                <FormHelperText
-                  sx={{ color: "error.main" }}
-                  id="categoryId-error"
-                >
-                  Categoria não pode ser vazia.
-                </FormHelperText>
-              )}
             </FormControl>
           </Grid>
         </>
