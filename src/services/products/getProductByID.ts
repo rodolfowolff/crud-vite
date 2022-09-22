@@ -8,6 +8,7 @@ export function getProductByID({ id }: { id: string | undefined }) {
       getProductByID(id: ${productIdNumber}) {
         id
         name
+        quantity
         code
         createdAt
         category {

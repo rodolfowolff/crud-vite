@@ -26,6 +26,7 @@ import FallbackSpinner from "../../components/Spinner";
 interface ProductData {
   categoryId: string;
   name: string;
+  quantity: string | number;
 }
 
 export default function PageProductEdit() {
@@ -42,6 +43,7 @@ export default function PageProductEdit() {
   const [values, setValues] = useState<ProductData>({
     categoryId: "",
     name: "",
+    quantity: "",
   });
 
   const {
@@ -53,6 +55,7 @@ export default function PageProductEdit() {
     defaultValues: {
       categoryId: dataProduct?.data?.getProductByID?.category?.name,
       name: dataProduct?.data?.getProductByID?.name,
+      quantity: dataProduct?.data?.getProductByID?.quantity,
     },
   });
 
@@ -65,7 +68,7 @@ export default function PageProductEdit() {
   const updateProductMutation = useMutation(
     async (data: ProductData) => {
       const queryString = `mutation{
-        updateProduct(id: ${id}, name: "${data.name}", categoryId: ${data.categoryId})
+        updateProduct(id: ${id}, name: "${data.name}", quantity: ${data.quantity}, categoryId: ${data.categoryId})
       }`;
       const response = await api(queryString);
       return response.data;
@@ -77,10 +80,13 @@ export default function PageProductEdit() {
     }
   );
 
-  const onSubmitEditProduct = async (data: { name: string }) => {
-    const { name } = data;
+  const onSubmitEditProduct = async (data: {
+    name: string;
+    quantity: string | number;
+  }) => {
+    const { name, quantity } = data;
     const { categoryId } = values;
-    const formData = { name, categoryId };
+    const formData = { name, quantity, categoryId };
     try {
       const dataRegister = await updateProductMutation.mutateAsync(formData);
       if (dataRegister.errors) {
@@ -96,6 +102,7 @@ export default function PageProductEdit() {
       handleEnqueueSnackbar("Erro tente novamente mais tarde", "error");
     } finally {
       setFormValue("name", "");
+      setFormValue("quantity", 1);
       navigate("/products");
     }
   };
@@ -110,10 +117,17 @@ export default function PageProductEdit() {
   if (isError || isErrorCategories) return <>Error(:</>;
 
   return (
-    <Box sx={{ p: 10 }}>
+    <Box
+      sx={{
+        p: 10,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       <Box sx={{ mb: 2, textAlign: "center" }}>
         <Typography variant="h5" sx={{ mb: 3 }}>
-          Editar informações do produto
+          Editar produto
         </Typography>
         <Typography sx={{ mb: 3 }}>
           Produto: {dataProduct?.data?.getProductByID?.name}
@@ -121,11 +135,14 @@ export default function PageProductEdit() {
         <Typography sx={{ mb: 3 }}>
           Categoria: {dataProduct?.data?.getProductByID?.category?.name}
         </Typography>
+        <Typography sx={{ mb: 3 }}>
+          Quantidade: {dataProduct?.data?.getProductByID?.quantity}
+        </Typography>
       </Box>
       <form onSubmit={handleSubmit(onSubmitEditProduct)} autoComplete="off">
-        <Grid container spacing={6}>
+        <>
           <Grid item sm={6} xs={12}>
-            <FormControl fullWidth sx={{ mb: 6 }}>
+            <FormControl sx={{ mb: 6, width: "100%" }}>
               <Controller
                 name="name"
                 control={control}
@@ -147,8 +164,36 @@ export default function PageProductEdit() {
               )}
             </FormControl>
           </Grid>
+
           <Grid item sm={6} xs={12}>
-            <FormControl fullWidth sx={{ mb: 6 }}>
+            <FormControl sx={{ mb: 6, width: "100%" }}>
+              <Controller
+                name="quantity"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    label="Quantidade"
+                    value={value}
+                    onChange={onChange}
+                    error={Boolean(errors.quantity)}
+                    placeholder={`${dataProduct.data.getProductByID.quantity}`}
+                  />
+                )}
+              />
+              {errors.quantity && (
+                <FormHelperText
+                  sx={{ color: "error.main" }}
+                  id="quantity-error"
+                >
+                  Quantidade não pode ser vazia.
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+
+          <Grid item sm={6} xs={12}>
+            <FormControl sx={{ mb: 6, width: "100%" }}>
               <InputLabel id="categoryId">Categoria</InputLabel>
               <Select
                 required={true}
@@ -176,7 +221,7 @@ export default function PageProductEdit() {
               )}
             </FormControl>
           </Grid>
-        </Grid>
+        </>
 
         <DialogActions
           sx={{ pb: { xs: 8, sm: 12.5 }, justifyContent: "center" }}
