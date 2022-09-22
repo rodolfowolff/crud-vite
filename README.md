@@ -68,6 +68,8 @@ No navegador, digitar <a href="http://localhost:5173/">http://localhost:5173/</a
 
 <!-- IMAGES -->
 <p align="center">
-  <img alt="home page" src=".github/products-min.png" width="100%">
-  <img alt="home page" src=".github/categories-min.png" width="100%">
+  <img alt="home page" src=".github/home-min.png" width="100%">
+  <img alt="home page" src=".github/menu-min.png" width="100%">
+  <img alt="products page" src=".github/products-min.png" width="100%">
+  <img alt="categories page" src=".github/categories-min.png" width="100%">
 </p>
