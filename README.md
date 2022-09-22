@@ -60,11 +60,13 @@ VITE_PUBLIC_API='http://localhost:4000/'
 
 No navegador, digitar <a href="http://localhost:5173/">http://localhost:5173/</a>.
 
-<!-- CONTACT -->
+<!-- LINKS -->
 
-## 🐺 👨‍💻 Desenvolvedor
+### API link do projeto
 
-- [Rodolfo Wolff](https://github.com/rodolfowolff)
+<a href="https://github.com/rodolfowolff/API-graphql-apollo-prisma">https://github.com/rodolfowolff/API-graphql-apollo-prisma</a>
+
+## Imagens
 
 <!-- IMAGES -->
 <p align="center">
@@ -73,3 +75,9 @@ No navegador, digitar <a href="http://localhost:5173/">http://localhost:5173/</a
   <img alt="products page" src=".github/products-min.png" width="100%">
   <img alt="categories page" src=".github/categories-min.png" width="100%">
 </p>
+
+<!-- CONTACT -->
+
+## 🐺 👨‍💻 Desenvolvedor
+
+- [Rodolfo Wolff](https://github.com/rodolfowolff)
