@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useState } from "react";
 import {
   Box,
   Button,
+  Divider,
   List,
   ListItem,
   ListItemText,
@@ -10,10 +10,7 @@ import {
 } from "@mui/material";
 import { getCategoriesQuery } from "../../services/categories/getAllCategories";
 import { Category } from "@mui/icons-material";
-
-interface CategoryProps {
-  name: string;
-}
+import AddCategoryDrawer from "../../components/Drawer/AddCategoryDrawer";
 
 export default function PageCategories() {
   const {
@@ -21,47 +18,15 @@ export default function PageCategories() {
     isLoading,
     isError,
   } = getCategoriesQuery();
-  const [columns, setColumns] = useState<GridColDef[]>();
-  const [rows, setRows] = useState<GridColDef[]>();
+  const [addCategoryOpen, setAddCategoryOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!isLoading && !isError) {
-      const getCategories = dataCategoriesQuery.getAllCategories.categories.map(
-        (cat: CategoryProps) => cat
-      );
-
-      const column = [
-        {
-          flex: 0.2,
-          minWidth: 250,
-          field: "name",
-          headerName: "Nome",
-          renderCell: ({ row }: any) => {
-            return (
-              <Typography noWrap variant="body2">
-                {row.name}
-              </Typography>
-            );
-          },
-        },
-      ];
-
-      const rows1 = getCategories.map((row: CategoryProps, index: number) => {
-        return {
-          id: index,
-          name: row.name,
-        };
-      });
-      setColumns(column);
-      setRows(rows1);
-    }
-  }, [isLoading, isError, dataCategoriesQuery]);
+  const toggleAddCategoryDrawer = () => setAddCategoryOpen(!addCategoryOpen);
 
   if (isLoading) return <>Loading...</>;
   if (isError) return <>Error(:</>;
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <>
       <Box
         sx={{
           display: "flex",
@@ -81,9 +46,7 @@ export default function PageCategories() {
         <Button
           variant="contained"
           size="large"
-          onClick={() => {
-            console.log("toggle");
-          }}
+          onClick={toggleAddCategoryDrawer}
           endIcon={<Category />}
           sx={{ mb: 2, width: 320, height: 60 }}
         >
@@ -91,26 +54,51 @@ export default function PageCategories() {
         </Button>
       </Box>
 
-      <Box sx={{ mt: 1, display: "flex", alignItems: "center", paddingX: 10 }}>
-        <List dense sx={{ mb: 1 }}>
+      <Box sx={{ mt: 5, display: "flex", alignItems: "center", paddingX: 10 }}>
+        <List
+          sx={{
+            width: "100%",
+            maxWidth: 660,
+            position: "relative",
+            overflow: "auto",
+            maxHeight: 400,
+          }}
+        >
           {dataCategoriesQuery?.getAllCategories?.categories?.map(
-            (cat: { id: number; name: string }) => {
-              return (
-                <ListItem
-                  key={cat.name}
-                  sx={{ px: 0, py: 2, display: "flex", flexWrap: "wrap" }}
-                >
+            (cat: { id: number; name: string }) => (
+              <Box key={`cat-${cat.name}-${cat.id}`}>
+                <ListItem>
                   <ListItemText
-                    sx={{ m: 0 }}
-                    primary={cat.id}
-                    secondary={cat.name}
+                    primary={
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="h6"
+                      >
+                        {cat.id}
+                      </Typography>
+                    }
+                    primaryTypographyProps={{
+                      fontSize: 15,
+                      fontWeight: "medium",
+                      lineHeight: "20px",
+                      mb: "2px",
+                    }}
+                    secondary={
+                      <Typography variant="body2">{cat.name}</Typography>
+                    }
                   />
                 </ListItem>
-              );
-            }
+                <Divider />
+              </Box>
+            )
           )}
         </List>
       </Box>
-    </div>
+      <AddCategoryDrawer
+        open={addCategoryOpen}
+        toggle={toggleAddCategoryDrawer}
+      />
+    </>
   );
 }

@@ -6,7 +6,7 @@ import { getCategoriesQuery } from "../../services/categories/getAllCategories";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 import TableHeader from "../../components/TableHeader";
-import SidebarAddProductDrawer from "../../components/Drawer";
+import AddProductDrawer from "../../components/Drawer/AddProductDrawer";
 import RowOptions from "../../components/Table/RowOptions";
 
 interface ProductProps {
@@ -108,7 +108,7 @@ export default function PageProducts() {
             rowsPerPageOptions={[10, 25, 50]}
           />
           {!isLoadingCategories && !isErrorCategories && (
-            <SidebarAddProductDrawer
+            <AddProductDrawer
               open={addProductOpen}
               toggle={toggleAddProductDrawer}
               categories={categoryData || []}

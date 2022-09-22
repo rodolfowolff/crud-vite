@@ -64,7 +64,7 @@ const defaultValues = {
   name: "",
 };
 
-const SidebarAddProductDrawer = (props: AddProductDrawerType) => {
+const AddProductDrawer = (props: AddProductDrawerType) => {
   const { open, toggle, categories } = props;
   const { enqueueSnackbar } = useSnackbar();
   const [selectCategory, setSelectCategory] = useState(categories[0]?.id || "");
@@ -227,4 +227,4 @@ const SidebarAddProductDrawer = (props: AddProductDrawerType) => {
   );
 };
 
-export default SidebarAddProductDrawer;
+export default AddProductDrawer;
