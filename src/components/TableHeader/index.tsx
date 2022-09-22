@@ -6,12 +6,10 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 interface TableHeaderProps {
   toggle: () => void;
-  categories: any;
 }
 
 const TableHeader = (props: TableHeaderProps) => {
-  const { toggle, categories } = props;
-  const [category, setCategory] = useState("");
+  const { toggle } = props;
 
   return (
     <Box
@@ -24,27 +22,6 @@ const TableHeader = (props: TableHeaderProps) => {
         width: "100%",
       }}
     >
-      {/* /* TODO - create filter */}
-      {/* <FormControl sx={{ mb: 2, width: 320 }}>
-        <InputLabel id="select-category">Categoria</InputLabel>
-        <Select
-          labelId="select-category"
-          id="select-category"
-          value={category}
-          label="Categoria"
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <MenuItem value="">
-            <em>Todas</em>
-          </MenuItem>
-          {categories?.map((cat: any) => (
-            <MenuItem key={cat?.name} value={cat?.id}>
-              {cat?.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
-
       <Button
         variant="contained"
         size="large"
