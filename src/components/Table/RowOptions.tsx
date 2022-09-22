@@ -1,11 +1,15 @@
-import { Link } from "react-router-dom";
-import { IconButton, Menu, MenuItem, styled } from "@mui/material";
 import { useState, MouseEvent, memo } from "react";
+import { Link } from "react-router-dom";
+import { useSnackbar, VariantType } from "notistack";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Visibility, MoreVert, Edit } from "@mui/icons-material";
+import { useMutation, useQueryClient } from "react-query";
+import { api } from "../../services/api";
 
 function RowOptions({ id }: { id: number | string }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const rowOptionsOpen = Boolean(anchorEl);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleRowOptionsClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -14,9 +18,45 @@ function RowOptions({ id }: { id: number | string }) {
     setAnchorEl(null);
   };
 
-  const handleDelete = () => {
-    // chamar funcao de deletar Produto passando o id
-    handleRowOptionsClose();
+  const handleEnqueueSnackbar = (message: string, variant: VariantType) => {
+    enqueueSnackbar(message, { variant });
+  };
+
+  const queryClient = useQueryClient();
+
+  const deleteProductMutation = useMutation(
+    async () => {
+      const queryString = `mutation{
+        deleteProduct(id: ${id})
+      }`;
+      console.log("queryString: ", queryString);
+      const response = await api(queryString);
+      return response.data;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["products"]);
+      },
+    }
+  );
+
+  const handleDelete = async () => {
+    try {
+      const dataRegister = await deleteProductMutation.mutateAsync();
+      if (dataRegister.errors) {
+        let message = "";
+        dataRegister.errors.forEach((error: any) => {
+          message += error.message;
+        });
+        handleEnqueueSnackbar(message, "warning");
+        return;
+      }
+      handleEnqueueSnackbar("Produto desativado", "success");
+    } catch {
+      handleEnqueueSnackbar("Erro tente novamente mais tarde", "error");
+    } finally {
+      handleRowOptionsClose();
+    }
   };
 
   return (

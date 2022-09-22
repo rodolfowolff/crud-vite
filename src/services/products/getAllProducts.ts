@@ -20,6 +20,6 @@ export function getProductsQuery() {
 
     const response = await api(queryString);
 
-    return response.data.data.getAllProducts;
+    return response.data;
   });
 }

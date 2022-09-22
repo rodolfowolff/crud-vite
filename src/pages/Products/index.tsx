@@ -38,8 +38,9 @@ export default function PageProducts() {
 
   useEffect(() => {
     if (!isLoading && !isError) {
-      const getProduct = dataProductsQuery.products.map((prod: any) => prod);
-
+      const getProduct = dataProductsQuery.data.getAllProducts.products.map(
+        (prod: any) => prod
+      );
       const productColName = Object.keys(getProduct[0]).map((col) => {
         return {
           field: col,
@@ -92,7 +93,7 @@ export default function PageProducts() {
         <Box sx={{ width: "100%" }}>
           <TableHeader
             toggle={toggleAddProductDrawer}
-            categories={categoryData}
+            categories={categoryData || []}
           />
           <DataGrid
             autoHeight
@@ -110,7 +111,7 @@ export default function PageProducts() {
             <SidebarAddProductDrawer
               open={addProductOpen}
               toggle={toggleAddProductDrawer}
-              categories={categoryData}
+              categories={categoryData || []}
             />
           )}
         </Box>

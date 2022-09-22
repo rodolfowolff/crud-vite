@@ -193,7 +193,6 @@ const SidebarAddProductDrawer = (props: AddProductDrawerType) => {
               labelId="selectCategory"
               onChange={(e) => setSelectCategory(e.target.value)}
               inputProps={{ placeholder: "Selecione a categoria" }}
-              // defaultValue='admin'
             >
               {categories.map((cat: any) => (
                 <MenuItem key={cat.name} value={cat.id}>
