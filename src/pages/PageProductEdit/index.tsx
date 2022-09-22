@@ -1,25 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
 import { useSnackbar, VariantType } from "notistack";
 
 import { api } from "../../services/api";
 import { getProductByID } from "../../services/products/getProductByID";
+import { getCategoriesQuery } from "../../services/categories/getAllCategories";
 
 import {
   Box,
   Button,
+  DialogActions,
   FormControl,
   FormHelperText,
+  Grid,
   InputLabel,
+  MenuItem,
   Select,
   TextField,
+  Typography,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 interface ProductData {
-  selectCategory: string;
+  categoryId: string;
   name: string;
 }
 
@@ -27,14 +31,28 @@ export default function PageProductEdit() {
   let { id } = useParams<"id">();
   const { enqueueSnackbar } = useSnackbar();
   const { data: dataProduct, isLoading, isError } = getProductByID({ id });
-  const [selectCategory, setSelectCategory] = useState("");
+  const {
+    data: dataCategoriesQuery,
+    isLoading: isLoadingCategories,
+    isError: isErrorCategories,
+  } = getCategoriesQuery();
+  const navigate = useNavigate();
+  const [categoryData, setCategoryData] = useState([]);
+  const [values, setValues] = useState<ProductData>({
+    categoryId: "",
+    name: "",
+  });
 
   const {
     control,
+    setValue: setFormValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    mode: "onChange",
+    defaultValues: {
+      categoryId: dataProduct?.data?.getProductByID?.category?.name,
+      name: dataProduct?.data?.getProductByID?.name,
+    },
   });
 
   const handleEnqueueSnackbar = (message: string, variant: VariantType) => {
@@ -44,9 +62,9 @@ export default function PageProductEdit() {
   const queryClient = useQueryClient();
 
   const updateProductMutation = useMutation(
-    async (values: ProductData) => {
+    async (data: ProductData) => {
       const queryString = `mutation{
-        createProduct(name: "${values.name}", categoryId: ${selectCategory})
+        updateProduct(id: ${id}, name: "${data.name}", categoryId: ${data.categoryId})
       }`;
       const response = await api(queryString);
       return response.data;
@@ -58,128 +76,132 @@ export default function PageProductEdit() {
     }
   );
 
-  const onSubmitEditProduct = async (data: ProductData) => {
-    console.log("data: ", data);
-    // try {
-    //   const dataRegister = await updateProductMutation.mutateAsync(data);
-    //   if (dataRegister.errors) {
-    //     let message = "";
-    //     dataRegister.errors.forEach((error: any) => {
-    //       message += error.message;
-    //     });
-    //     handleEnqueueSnackbar(message, "warning");
-    //     return;
-    //   }
-    //   handleEnqueueSnackbar("Produto atualizado", "success");
-    // } catch {
-    //   handleEnqueueSnackbar("Erro tente novamente mais tarde", "error");
-    // }
+  const onSubmitEditProduct = async (data: { name: string }) => {
+    const { name } = data;
+    const { categoryId } = values;
+    const formData = { name, categoryId };
+    try {
+      const dataRegister = await updateProductMutation.mutateAsync(formData);
+      if (dataRegister.errors) {
+        let message = "";
+        dataRegister.errors.forEach((error: any) => {
+          message += error.message;
+        });
+        handleEnqueueSnackbar(message, "warning");
+        return;
+      }
+      handleEnqueueSnackbar("Produto atualizado", "success");
+    } catch {
+      handleEnqueueSnackbar("Erro tente novamente mais tarde", "error");
+    } finally {
+      setFormValue("name", "");
+      navigate("/products");
+    }
   };
 
-  const handleCancelUpdate = () => {
-    console.log("retornar a pagina de produtos");
-  };
+  useEffect(() => {
+    if (!isErrorCategories && !isLoadingCategories) {
+      setCategoryData(dataCategoriesQuery.categories);
+    }
+  }, [isLoadingCategories, isErrorCategories, dataCategoriesQuery]);
 
-  if (isLoading) return <>Loading...</>;
-  if (isError) return <>Error(:</>;
+  if (isLoading || isLoadingCategories) return <>Loading...</>;
+  if (isError || isErrorCategories) return <>Error(:</>;
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <h2>Detalhes do produto {id}</h2>
-      {/* 
-      <p>{dataProduct.data.getProductByID.name}</p>
-      <p>{dataProduct.data.getProductByID.code}</p>
-      <p>{dataProduct.data.getProductByID.createdAt}</p>
-      <p>{dataProduct.data.getProductByID.category.name}</p>
-      <p>
-        <Link to="/products">Retornar a lista de produtos</Link>
-      </p> */}
-
-      <Box sx={{ p: 5 }}>
-        <form
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmitEditProduct)}
-        >
-          <FormControl fullWidth sx={{ mb: 4 }}>
-            <Controller
-              name="name"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange } }) => (
-                <TextField
-                  value={dataProduct.data.getProductByID.name}
-                  label="Nome"
-                  onChange={onChange}
-                  placeholder="Teclado"
-                  error={Boolean(errors.name)}
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl fullWidth sx={{ mb: 4 }}>
-            <Controller
-              name="selectCategory"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { onChange } }) => (
-                <TextField
-                  value={dataProduct.data.getProductByID.category.name}
-                  label="Nome"
-                  onChange={onChange}
-                  placeholder="Teclado"
-                  error={Boolean(errors.selectCategory)}
-                />
-              )}
-            />
-          </FormControl>
-
-          {/* <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel id="selectCategory">Selecione a categoria</InputLabel>
-            <Select
-              fullWidth
-              value={selectCategory}
-              id="selectCategory"
-              label="Selecione a categoria"
-              labelId="selectCategory"
-              onChange={(e) => setSelectCategory(e.target.value)}
-              inputProps={{ placeholder: "Selecione a categoria" }}
-              // defaultValue='admin'
-            >
-              {categories.map((cat: any) => (
-                <MenuItem key={cat.name} value={cat.id}>
-                  {cat.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "end",
-            }}
-          >
-            <Link
-              to="/products"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <Button
-                size="large"
-                variant="contained"
-                color="inherit"
-                sx={{ mr: 5 }}
-              >
-                Cancelar
-              </Button>
-            </Link>
-            <Button size="large" type="submit" variant="contained">
-              Adicionar
-            </Button>
-          </Box>
-        </form>
+    <Box
+      sx={{
+        p: 10,
+      }}
+    >
+      <Box sx={{ mb: 2, textAlign: "center" }}>
+        <Typography variant="h5" sx={{ mb: 3 }}>
+          Editar informações do produto
+        </Typography>
+        <Typography sx={{ mb: 3 }}>
+          Produto: {dataProduct?.data?.getProductByID?.name}
+        </Typography>
+        <Typography sx={{ mb: 3 }}>
+          Categoria: {dataProduct?.data?.getProductByID?.category?.name}
+        </Typography>
       </Box>
-    </div>
+      <form onSubmit={handleSubmit(onSubmitEditProduct)} autoComplete="off">
+        <Grid container spacing={6}>
+          <Grid item sm={6} xs={12}>
+            <FormControl fullWidth sx={{ mb: 6 }}>
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    label="Nome"
+                    value={value}
+                    onChange={onChange}
+                    error={Boolean(errors.name)}
+                    placeholder={dataProduct?.data?.getProductByID?.name}
+                  />
+                )}
+              />
+              {errors.name && (
+                <FormHelperText sx={{ color: "error.main" }} id="name-error">
+                  Nome não pode ser vazio.
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+          <Grid item sm={6} xs={12}>
+            <FormControl fullWidth sx={{ mb: 6 }}>
+              <InputLabel id="categoryId">Categoria</InputLabel>
+              <Select
+                required={true}
+                label="Categoria"
+                labelId="categoryId"
+                value={values.categoryId}
+                onChange={(e) =>
+                  setValues({ ...values, categoryId: e.target.value })
+                }
+                error={Boolean(errors.categoryId)}
+              >
+                {categoryData?.map((cat: any) => (
+                  <MenuItem key={cat.name} value={cat.id}>
+                    {cat.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.categoryId && (
+                <FormHelperText
+                  sx={{ color: "error.main" }}
+                  id="categoryId-error"
+                >
+                  Categoria não pode ser vazia.
+                </FormHelperText>
+              )}
+            </FormControl>
+          </Grid>
+        </Grid>
+
+        <DialogActions
+          sx={{ pb: { xs: 8, sm: 12.5 }, justifyContent: "center" }}
+        >
+          <Link
+            to="/products"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Button
+              size="large"
+              variant="outlined"
+              sx={{ mr: 1 }}
+              color="inherit"
+            >
+              Cancelar
+            </Button>
+          </Link>
+          <Button size="large" type="submit" variant="contained">
+            Atualizar
+          </Button>
+        </DialogActions>
+      </form>
+    </Box>
   );
 }
