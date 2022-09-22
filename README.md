@@ -66,7 +66,8 @@ No navegador, digitar <a href="http://localhost:5173/">http://localhost:5173/</a
 
 - [Rodolfo Wolff](https://github.com/rodolfowolff)
 
-<!-- MARKDOWN LINKS & IMAGES -->
-
-[products]: public/products-min.png
-[categories]: public/categories-min.png
+<!-- IMAGES -->
+<p align="center">
+  <img alt="home page" src=".github/products-min.png" width="100%">
+  <img alt="home page" src=".github/categories-min.png" width="100%">
+</p>
