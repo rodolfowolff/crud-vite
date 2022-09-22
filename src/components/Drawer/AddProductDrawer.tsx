@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
@@ -17,10 +18,11 @@ import {
   Typography,
   FormControl,
   FormHelperText,
+  IconButton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Box, { BoxProps } from "@mui/material/Box";
-import Close from "@mui/icons-material/Close";
+import { Close, ArrowForward } from "@mui/icons-material";
 
 interface AddProductDrawerType {
   open: boolean;
@@ -31,7 +33,7 @@ interface AddProductDrawerType {
 interface ProductData {
   selectCategory: number | string;
   name: string;
-  quantity: number;
+  quantity: number | string;
 }
 
 const showErrors = (field: string, valueLen: number, min: number) => {
@@ -160,97 +162,127 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
         />
       </Header>
       <Box sx={{ p: 5 }}>
-        <form
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmitAddProduct)}
-        >
-          <FormControl fullWidth sx={{ mb: 4 }}>
-            <Controller
-              name="name"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <TextField
-                  value={value}
-                  label="Nome"
-                  onChange={onChange}
-                  placeholder="Insira o nome do produto"
-                  error={Boolean(errors.name)}
-                />
-              )}
-            />
-            {errors.name && (
-              <FormHelperText sx={{ color: "error.main" }}>
-                Nome não pode ser vazio e no minimo 3 letras
-              </FormHelperText>
-            )}
-          </FormControl>
-
-          <FormControl fullWidth sx={{ mb: 4 }}>
-            <Controller
-              name="quantity"
-              control={control}
-              rules={{ required: true }}
-              render={({ field: { value, onChange } }) => (
-                <TextField
-                  value={value}
-                  label="Quantidade"
-                  onChange={onChange}
-                  placeholder="Insira o nome do produto"
-                  error={Boolean(errors.quantity)}
-                />
-              )}
-            />
-            {errors.quantity && (
-              <FormHelperText sx={{ color: "error.main" }}>
-                Quantidade não pode ser vazia ou menor que 1
-              </FormHelperText>
-            )}
-          </FormControl>
-
-          <FormControl fullWidth sx={{ mb: 6 }}>
-            <InputLabel id="selectCategory">Selecione a categoria</InputLabel>
-            <Select
-              fullWidth
-              value={selectCategory}
-              id="selectCategory"
-              label="Selecione a categoria"
-              labelId="selectCategory"
-              onChange={(e) => setSelectCategory(e.target.value as number)}
-              inputProps={{ placeholder: "Selecione a categoria" }}
-            >
-              {categories?.map((cat: { id: number; name: string }) => (
-                <MenuItem
-                  key={`category-${cat?.name}-${cat?.id}`}
-                  value={cat?.id}
-                >
-                  {cat?.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "end",
-            }}
+        {categories.length >= 1 ? (
+          <form
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmitAddProduct)}
           >
-            <Button
-              size="large"
-              variant="contained"
-              color="inherit"
-              onClick={handleClose}
-              sx={{ mr: 5 }}
+            <FormControl fullWidth sx={{ mb: 4 }}>
+              <Controller
+                name="name"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    value={value}
+                    label="Nome"
+                    onChange={onChange}
+                    placeholder="Insira o nome do produto"
+                    error={Boolean(errors.name)}
+                  />
+                )}
+              />
+              {errors.name && (
+                <FormHelperText sx={{ color: "error.main" }}>
+                  Nome não pode ser vazio e no minimo 3 letras
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl fullWidth sx={{ mb: 4 }}>
+              <Controller
+                name="quantity"
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    value={value}
+                    label="Quantidade"
+                    onChange={onChange}
+                    placeholder="Insira o nome do produto"
+                    error={Boolean(errors.quantity)}
+                  />
+                )}
+              />
+              {errors.quantity && (
+                <FormHelperText sx={{ color: "error.main" }}>
+                  Quantidade não pode ser vazia ou menor que 1
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl fullWidth sx={{ mb: 6 }}>
+              <InputLabel id="selectCategory">Selecione a categoria</InputLabel>
+              <Select
+                fullWidth
+                value={selectCategory}
+                id="selectCategory"
+                label="Selecione a categoria"
+                labelId="selectCategory"
+                onChange={(e) => setSelectCategory(e.target.value as number)}
+                inputProps={{ placeholder: "Selecione a categoria" }}
+              >
+                {categories?.map((cat: { id: number; name: string }) => (
+                  <MenuItem
+                    key={`category-${cat?.name}-${cat?.id}`}
+                    value={cat?.id}
+                  >
+                    {cat?.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "end",
+              }}
             >
-              Cancelar
-            </Button>
-            <Button size="large" type="submit" variant="contained">
-              Adicionar
-            </Button>
-          </Box>
-        </form>
+              <Button
+                size="large"
+                variant="contained"
+                color="inherit"
+                onClick={handleClose}
+                sx={{ mr: 5 }}
+              >
+                Cancelar
+              </Button>
+              <Button size="large" type="submit" variant="contained">
+                Adicionar
+              </Button>
+            </Box>
+          </form>
+        ) : (
+          <>
+            <Box sx={{ pl: 1 }}>
+              <Typography variant="h6">Nenhuma categoria cadastrada</Typography>
+            </Box>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "5px",
+              }}
+            >
+              <Link to="/categories" style={{ textDecoration: "none" }}>
+                <IconButton
+                  size="small"
+                  aria-label="redirect"
+                  sx={{ color: "text.secondary", mt: 5 }}
+                >
+                  <Typography variant="h6" sx={{ mr: 1 }}>
+                    Criar categoria
+                  </Typography>
+
+                  <ArrowForward />
+                </IconButton>
+              </Link>
+            </div>
+          </>
+        )}
       </Box>
     </Drawer>
   );
