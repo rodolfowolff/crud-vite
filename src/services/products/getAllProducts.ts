@@ -8,6 +8,7 @@ export function getProductsQuery() {
           products {
             id
             name
+            quantity
             code
             createdAt
             category {

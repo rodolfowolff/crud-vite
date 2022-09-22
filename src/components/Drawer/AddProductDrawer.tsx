@@ -31,6 +31,7 @@ interface AddProductDrawerType {
 interface ProductData {
   selectCategory: number | string;
   name: string;
+  quantity: number;
 }
 
 const showErrors = (field: string, valueLen: number, min: number) => {
@@ -52,6 +53,10 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 }));
 
 const schema = yup.object().shape({
+  quantity: yup
+    .number()
+    .min(1, (obj) => showErrors("Nome", obj.value.length, obj.min))
+    .required(),
   name: yup
     .string()
     .min(3, (obj) => showErrors("Nome", obj.value.length, obj.min))
@@ -61,6 +66,7 @@ const schema = yup.object().shape({
 const defaultValues = {
   selectCategory: "",
   name: "",
+  quantity: "",
 };
 
 const AddProductDrawer = (props: AddProductDrawerType) => {
@@ -84,7 +90,7 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
   const createProductMutation = useMutation(
     async (values: ProductData) => {
       const queryString = `mutation{
-        createProduct(name: "${values.name}", categoryId: ${selectCategory})
+        createProduct(name: "${values.name}", quantity: ${values.quantity}, categoryId: ${selectCategory})
       }`;
       const response = await api(queryString);
       return response.data;
@@ -118,6 +124,7 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
       toggle();
       setSelectCategory("");
       setValue("name", "");
+      setValue("quantity", "");
     }
   };
 
@@ -176,6 +183,28 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
             {errors.name && (
               <FormHelperText sx={{ color: "error.main" }}>
                 Nome não pode ser vazio e no minimo 3 letras
+              </FormHelperText>
+            )}
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mb: 4 }}>
+            <Controller
+              name="quantity"
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { value, onChange } }) => (
+                <TextField
+                  value={value}
+                  label="Quantidade"
+                  onChange={onChange}
+                  placeholder="Insira o nome do produto"
+                  error={Boolean(errors.quantity)}
+                />
+              )}
+            />
+            {errors.quantity && (
+              <FormHelperText sx={{ color: "error.main" }}>
+                Quantidade não pode ser vazia ou menor que 1
               </FormHelperText>
             )}
           </FormControl>

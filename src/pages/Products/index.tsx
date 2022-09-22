@@ -16,6 +16,7 @@ interface ProductProps {
   id: number;
   name: string;
   code: string;
+  quantity: number;
   category: {
     name: string;
   };
@@ -70,6 +71,7 @@ export default function PageProducts() {
           return {
             id: row.id,
             name: row.name,
+            quantity: row.quantity,
             code: row.code,
             createdAt: row.createdAt,
             category: row.category.name,
