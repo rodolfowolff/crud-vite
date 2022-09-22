@@ -1,15 +1,19 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { getCategoriesQuery } from "../../services/categories/getAllCategories";
+
 import {
   Box,
   Button,
   Divider,
+  IconButton,
   List,
   ListItem,
   ListItemText,
   Typography,
 } from "@mui/material";
-import { getCategoriesQuery } from "../../services/categories/getAllCategories";
-import { Category } from "@mui/icons-material";
+import { Category, ArrowBack } from "@mui/icons-material";
 import AddCategoryDrawer from "../../components/Drawer/AddCategoryDrawer";
 import FallbackSpinner from "../../components/Spinner";
 
@@ -95,6 +99,26 @@ export default function PageCategories() {
           )}
         </List>
       </Box>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "5px",
+        }}
+      >
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <IconButton
+            size="small"
+            aria-label="redirect"
+            sx={{ color: "text.secondary", mt: 5 }}
+          >
+            <ArrowBack />
+            <Typography variant="body1" sx={{ mr: 1 }}>
+              Voltar a pagina inicial
+            </Typography>
+          </IconButton>
+        </Link>
+      </div>
       <AddCategoryDrawer
         open={addCategoryOpen}
         toggle={toggleAddCategoryDrawer}

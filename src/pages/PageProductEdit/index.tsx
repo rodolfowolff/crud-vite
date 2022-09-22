@@ -169,7 +169,7 @@ export default function PageProductEdit() {
                     label="Quantidade"
                     value={value}
                     onChange={onChange}
-                    placeholder={`${dataProduct.data.getProductByID.quantity}`}
+                    placeholder={`${dataProduct?.data?.getProductByID?.quantity}`}
                   />
                 )}
               />

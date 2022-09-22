@@ -5,7 +5,7 @@ import { getProductsQuery } from "../../services/products/getAllProducts";
 import { getCategoriesQuery } from "../../services/categories/getAllCategories";
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import TableHeader from "../../components/TableHeader";
 import AddProductDrawer from "../../components/Drawer/AddProductDrawer";
 import RowOptions from "../../components/Table/RowOptions";
@@ -126,29 +126,26 @@ export default function PageProducts() {
           </Box>
         )}
 
-        <Box
-          sx={{
-            alignItems: "center",
-            justifyItems: "center",
-            paddingX: 9,
-            mt: 5,
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "5px",
           }}
         >
-          <Link
-            to="/"
-            style={{
-              textDecoration: "none",
-              color: "purple",
-            }}
-          >
-            <ArrowBackIcon
-              sx={{
-                cursor: "pointer",
-              }}
-            />
-            Retornar a pagina inicial
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <IconButton
+              size="small"
+              aria-label="redirect"
+              sx={{ color: "text.secondary", mt: 5 }}
+            >
+              <ArrowBackIcon />
+              <Typography variant="body1" sx={{ mr: 1 }}>
+                Voltar a pagina inicial
+              </Typography>
+            </IconButton>
           </Link>
-        </Box>
+        </div>
       </Box>
     </>
   );
