@@ -20,11 +20,12 @@ const TableHeader = (props: TableHeaderProps) => {
         display: "flex",
         flexWrap: "wrap",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "end",
         width: "100%",
       }}
     >
-      <FormControl sx={{ mb: 2, width: 320 }}>
+      {/* /* TODO - create filter */}
+      {/* <FormControl sx={{ mb: 2, width: 320 }}>
         <InputLabel id="select-category">Categoria</InputLabel>
         <Select
           labelId="select-category"
@@ -42,7 +43,7 @@ const TableHeader = (props: TableHeaderProps) => {
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
 
       <Button
         variant="contained"
