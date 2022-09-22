@@ -29,7 +29,7 @@ interface AddProductDrawerType {
 }
 
 interface ProductData {
-  selectCategory: string;
+  selectCategory: number | string;
   name: string;
 }
 
@@ -66,7 +66,7 @@ const defaultValues = {
 const AddProductDrawer = (props: AddProductDrawerType) => {
   const { open, toggle, categories } = props;
   const { enqueueSnackbar } = useSnackbar();
-  const [selectCategory, setSelectCategory] = useState(1);
+  const [selectCategory, setSelectCategory] = useState<number | string>("");
 
   const {
     control,
@@ -116,14 +116,14 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
       handleEnqueueSnackbar("Erro tente novamente mais tarde", "error");
     } finally {
       toggle();
-      setSelectCategory(1);
+      setSelectCategory("");
       setValue("name", "");
     }
   };
 
   const handleClose = () => {
     toggle();
-    setSelectCategory(0);
+    setSelectCategory("");
   };
 
   return (
@@ -168,7 +168,7 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
                   value={value}
                   label="Nome"
                   onChange={onChange}
-                  placeholder="Teclado"
+                  placeholder="Insira o nome do produto"
                   error={Boolean(errors.name)}
                 />
               )}
@@ -191,9 +191,12 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
               onChange={(e) => setSelectCategory(e.target.value as number)}
               inputProps={{ placeholder: "Selecione a categoria" }}
             >
-              {categories.map((cat: any) => (
-                <MenuItem key={cat.name} value={cat.id}>
-                  {cat.name}
+              {categories?.map((cat: { id: number; name: string }) => (
+                <MenuItem
+                  key={`category-${cat?.name}-${cat?.id}`}
+                  value={cat?.id}
+                >
+                  {cat?.name}
                 </MenuItem>
               ))}
             </Select>
