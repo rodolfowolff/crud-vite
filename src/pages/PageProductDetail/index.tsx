@@ -1,3 +1,8 @@
+import { format } from "date-fns";
+import { Link, useParams } from "react-router-dom";
+import FallbackSpinner from "../../components/Spinner";
+import { getProductByID } from "../../services/products/getProductByID";
+
 import {
   Box,
   Divider,
@@ -6,10 +11,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { format } from "date-fns";
-import { Link, useParams } from "react-router-dom";
-import FallbackSpinner from "../../components/Spinner";
-import { getProductByID } from "../../services/products/getProductByID";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function PageProductDetail() {
   let { id } = useParams<"id">();
@@ -25,13 +27,12 @@ export default function PageProductDetail() {
           display: "flex",
           flexWrap: "wrap",
           alignItems: "center",
-          justifyContent: "space-between",
-          paddingX: 10,
+          paddingX: 9,
         }}
       >
         <Typography
           variant="h6"
-          sx={{ mr: 2, fontWeight: 600, color: "text.primary" }}
+          sx={{ ml: 3, fontWeight: 600, color: "text.primary" }}
         >
           {`Detalhes do produto`}
         </Typography>
@@ -145,7 +146,30 @@ export default function PageProductDetail() {
           </ListItem>
         </List>
       </Box>
-      <Link to="/products">Retornar a lista de produtos</Link>
+
+      <Box
+        sx={{
+          alignItems: "center",
+          justifyItems: "center",
+          paddingX: 9,
+          mt: 5,
+        }}
+      >
+        <Link
+          to="/products"
+          style={{
+            textDecoration: "none",
+            color: "purple",
+          }}
+        >
+          <ArrowBackIcon
+            sx={{
+              cursor: "pointer",
+            }}
+          />
+          Retornar a lista de produtos
+        </Link>
+      </Box>
     </>
   );
 }
