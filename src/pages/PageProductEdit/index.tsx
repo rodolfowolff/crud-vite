@@ -101,7 +101,7 @@ export default function PageProductEdit() {
 
   useEffect(() => {
     if (!isErrorCategories && !isLoadingCategories) {
-      setCategoryData(dataCategoriesQuery.categories);
+      setCategoryData(dataCategoriesQuery?.getAllCategories?.categories);
     }
   }, [isLoadingCategories, isErrorCategories, dataCategoriesQuery]);
 
@@ -109,11 +109,7 @@ export default function PageProductEdit() {
   if (isError || isErrorCategories) return <>Error(:</>;
 
   return (
-    <Box
-      sx={{
-        p: 10,
-      }}
-    >
+    <Box sx={{ p: 10 }}>
       <Box sx={{ mb: 2, textAlign: "center" }}>
         <Typography variant="h5" sx={{ mb: 3 }}>
           Editar informações do produto

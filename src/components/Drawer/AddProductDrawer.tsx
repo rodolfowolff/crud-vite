@@ -17,6 +17,8 @@ import {
   Typography,
   FormControl,
   FormHelperText,
+  Grid,
+  DialogActions,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Box, { BoxProps } from "@mui/material/Box";
@@ -52,7 +54,6 @@ const Header = styled(Box)<BoxProps>(({ theme }) => ({
 }));
 
 const schema = yup.object().shape({
-  selectCategory: yup.string().required(),
   name: yup
     .string()
     .min(3, (obj) => showErrors("Nome", obj.value.length, obj.min))
@@ -67,10 +68,9 @@ const defaultValues = {
 const AddProductDrawer = (props: AddProductDrawerType) => {
   const { open, toggle, categories } = props;
   const { enqueueSnackbar } = useSnackbar();
-  const [selectCategory, setSelectCategory] = useState(categories[0]?.id || "");
+  const [selectCategory, setSelectCategory] = useState(1);
 
   const {
-    reset,
     control,
     setValue,
     handleSubmit,
@@ -117,16 +117,15 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
     } catch {
       handleEnqueueSnackbar("Erro tente novamente mais tarde", "error");
     } finally {
-      reset();
       toggle();
+      setSelectCategory(1);
+      setValue("name", "");
     }
   };
 
   const handleClose = () => {
     toggle();
-    reset();
-    setSelectCategory("");
-    setValue("name", "");
+    setSelectCategory(0);
   };
 
   return (
@@ -178,7 +177,7 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
             />
             {errors.name && (
               <FormHelperText sx={{ color: "error.main" }}>
-                {errors.name.message}
+                Nome não pode ser vazio e no minimo 3 letras
               </FormHelperText>
             )}
           </FormControl>
@@ -191,7 +190,7 @@ const AddProductDrawer = (props: AddProductDrawerType) => {
               id="selectCategory"
               label="Selecione a categoria"
               labelId="selectCategory"
-              onChange={(e) => setSelectCategory(e.target.value)}
+              onChange={(e) => setSelectCategory(e.target.value as number)}
               inputProps={{ placeholder: "Selecione a categoria" }}
             >
               {categories.map((cat: any) => (

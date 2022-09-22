@@ -61,7 +61,6 @@ export default function PageCategories() {
             maxWidth: 660,
             position: "relative",
             overflow: "auto",
-            maxHeight: 400,
           }}
         >
           {dataCategoriesQuery?.getAllCategories?.categories?.map(
